@@ -6,7 +6,7 @@ using std::string;
 using std::stoi;
 using std::to_string;
 
-string task101(string &input) {
+string task_101(string &input) {
 	int coord[5];
 	int ind = 0;
 	int l = input.length();
