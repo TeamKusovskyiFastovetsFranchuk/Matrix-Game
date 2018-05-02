@@ -6,7 +6,7 @@ using std::string;
 using std::stoi;
 using std::to_string;
 
-string task181(string &input) {
+string task_181(string &input) {
 	int k = stoi(input);
 	int ans = 0;
 	while (k > 0) {
