@@ -70,4 +70,5 @@ main.cpp
 # --------
 *.dll
 *.exe
+*.out
 
