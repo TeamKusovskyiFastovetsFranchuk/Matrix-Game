@@ -1,12 +1,12 @@
-#ifndef TRIANGLEEXISTS_H
-#define TRIANGLEEXISTS_H
+#ifndef TASK_81_100_H
+#define TASK_81_100_H
 
 #include <string>
 using std::string;
 using std::stoi;
 using std::to_string;
 
-string isTriangle(string input) {
+string task81(string &input) {
 	int l = input.length();
 	string s[3];
 	int ind = 0;
@@ -24,4 +24,4 @@ string isTriangle(string input) {
 	return to_string((a + b > c) && (a + c > b) && (b + c > a));
 }
 
-#endif // TRIANGLEEXISTS_H
+#endif // TASK_81_100_H

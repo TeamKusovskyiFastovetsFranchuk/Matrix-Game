@@ -1,9 +1,9 @@
-#ifndef LINE_H
-#define LINE_H
+#ifndef TASK_61_80_H
+#define TASK_61_80_H
 
 #include <string>
 
-std::string line(std::string input) {
+std::string task61(std::string &input) {
 	int x = 0;
 	int y = 0;
 	int l = input.length();
@@ -73,4 +73,4 @@ std::string line(std::string input) {
 }
 
 
-#endif // LINE_H
+#endif // TASK_61_80_H

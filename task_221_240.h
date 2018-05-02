@@ -1,12 +1,12 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef TASK_221_240_H
+#define TASK_221_240_H
 
 #include <string>
 using std::string;
 using std::stoi;
 using std::to_string;
 
-string arrayAddition(string input) {
+string task221(string &input) {
 	int l = input.length();
 	string ans = "0123456789ABCDEF";
 	for (int i = 0; i < l; ++i) {
@@ -18,4 +18,4 @@ string arrayAddition(string input) {
 	return ans;
 }
 
-#endif // ARRAY_H
+#endif // TASK_221_240_H

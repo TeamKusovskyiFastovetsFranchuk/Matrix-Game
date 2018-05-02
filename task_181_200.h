@@ -1,12 +1,12 @@
-#ifndef BINARYONESCOUNT_H
-#define BINARYONESCOUNT_H
+#ifndef TASK_181_200_H
+#define TASK_181_200_H
 
 #include <string>
 using std::string;
 using std::stoi;
 using std::to_string;
 
-string onesCount(string input) {
+string task181(string &input) {
 	int k = stoi(input);
 	int ans = 0;
 	while (k > 0) {
@@ -18,4 +18,4 @@ string onesCount(string input) {
 	return to_string(ans);
 }
 
-#endif // BINARYONESCOUNT_H
+#endif // TASK_181_200_H

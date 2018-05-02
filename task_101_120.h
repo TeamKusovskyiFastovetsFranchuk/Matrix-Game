@@ -1,12 +1,12 @@
-#ifndef VECTORORTOGONAL_H
-#define VECTORORTOGONAL_H
+#ifndef TASK_101_120_H
+#define TASK_101_120_H
 
 #include <string>
 using std::string;
 using std::stoi;
 using std::to_string;
 
-string isOrtogonal(string input) {
+string task101(string &input) {
 	int coord[5];
 	int ind = 0;
 	int l = input.length();
@@ -37,4 +37,4 @@ string isOrtogonal(string input) {
 	}
 	return to_string((coord[0] * coord[2]) + (coord[1] * coord[3]) == 0 ? 1 : 0);
 }
-#endif // VECTORORTOGONAL_H
+#endif // TASK_101_120_H
