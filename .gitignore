@@ -59,6 +59,13 @@ main.cpp
 *.vcxproj
 *vcxproj.*
 
+#CLion
+.idea/
+cmake-build-debug/
+
+#CMake
+CMakeLists.txt
+
 # MinGW generated files
 *.Debug
 *.Release
