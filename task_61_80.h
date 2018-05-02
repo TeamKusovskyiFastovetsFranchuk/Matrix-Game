@@ -3,7 +3,7 @@
 
 #include <string>
 
-std::string task61(std::string &input) {
+std::string task_61(std::string &input) {
 	int x = 0;
 	int y = 0;
 	int l = input.length();
