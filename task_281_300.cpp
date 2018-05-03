@@ -2,8 +2,7 @@
 
 #include <regex>
 #include <cmath>
-
-#include <QString>
+#include <cstdio>
 
 
 std::string task_281_300(const std::string& str)
@@ -24,7 +23,8 @@ std::string task_281_300(const std::string& str)
 
     float nx = x * cos(r_a) + y * sin(r_a);
     float ny = y * cos(r_a) - x * sin(r_a);
-
-    QString format = "%1,%2";
-    return format.arg(QString::number(nx, 'f', 2)).arg(QString::number(ny, 'f', 2)).toStdString();
+    
+    char out[25];
+    sprintf(out, "%.2F,%.2F", nx, ny);
+    return out;
 }
