@@ -59,6 +59,9 @@ main.cpp
 *.vcxproj
 *vcxproj.*
 
+#Visual Code
+.vscode/
+
 #CLion
 .idea/
 cmake-build-debug/
