@@ -51,8 +51,8 @@ std::string task_701_720(std::string const& str)
     std::stack<char> operations;
 
     int tmpNumber = 0;
-    int indexPrevOperator = -1;
-    int indexPrevOperand = -1;
+    int countBracket = 0;
+    int indexLastPart = -1;
 
     for (int i = 0; i < str.size(); i++) {
         char c = str[i];
@@ -60,16 +60,28 @@ std::string task_701_720(std::string const& str)
             continue;
         }
         if (c == '(') {
+            if (indexLastPart != -1 && isDigit(str[indexLastPart])) { // operator missed
+                return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            }
             operations.push('(');
+            countBracket++;
         }
         else if (c == ')') {
-            while (operations.top() != '(') {
+            while (!operations.empty() && operations.top() != '(') {
                 computeOperation(values, operations.top());
                 operations.pop();
             }
+            if (operations.empty()) { // too many ')'
+                return "TOO_MANY_)";
+            }
             operations.pop();
+            countBracket--;
         }
         else if (isOperator(c)) {
+            if (indexLastPart != -1 && !(isDigit(str[indexLastPart]) || str[indexLastPart] == ')')) { // operand missed
+                return std::string("OPERAND_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            }
+
             while (!operations.empty() && priority(operations.top()) >= priority(c)) {
                 computeOperation(values, operations.top());
                 operations.pop();
@@ -77,6 +89,9 @@ std::string task_701_720(std::string const& str)
             operations.push(c);
         }
         else if (isDigit(c)) {
+            if (indexLastPart != -1 && isDigit(str[indexLastPart])) { // operator missed
+                return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            }
             tmpNumber = c - '0';
             i++;
             while (i < str.size() && isDigit(str[i])) {
@@ -84,12 +99,15 @@ std::string task_701_720(std::string const& str)
                 i++;
             }
             i--;
-            indexPrevOperand = i;
             values.push(tmpNumber);
         }
         else {
             return std::string("UNEXPECTED_SYMBOL,") + c;
         }
+        indexLastPart = i;
+    }
+    if (countBracket % 2 == 1) { // too many '('
+        return "TOO_MANY_(";
     }
     while(!operations.empty()){
         computeOperation(values, operations.top());
