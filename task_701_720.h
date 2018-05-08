@@ -4,55 +4,98 @@
 #include <string>
 #include <queue>
 #include <stack>
+#include <cctype>
 
-namespace Calculator
+namespace calculator
 {
-    class Expression
+    inline bool isDelim(char c) { return isspace(c); }
+    inline bool isDigit(char c) { return isdigit(c); }
+    inline bool isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
+    inline int priority(char c) 
     {
-        char m_op;
-        int m_value;
-    public:
-        Expression(char op) : m_op(op) { }
-        Expression(int value) : m_value(value), m_op('\0') { }
-        bool isOperation() const { return m_op != '\0'; }
-        int value() const { return m_value; }
-        int exec(int v1, int v2) const
-        {
-            switch(m_op)
-            {
-            case '+':
-                return v1 + v2;
-            case '-':
-                return v1 - v2;
-            case '*':
-                return v1 * v2;
-            case '/':
-                return v1 / v2;
-            }
-            return 0;
+        if (c == '+' || c == '-')
+            return 1;
+        if (c == '*' || c == '/')
+            return 2;
+        return -1;
+    }
+
+    void computeOperation(std::stack<int>& values, char op)
+    {
+        int v2 = values.top();
+        values.pop();
+        int v1 = values.top();
+        values.pop();
+        switch (op) {
+        case '+':
+            values.push(v1 + v2);
+            break;
+        case '-':
+            values.push(v1 - v2);
+            break;
+        case '*':
+            values.push(v1 * v2);
+            break;
+        case '/':
+            values.push(v1 / v2);
+            break;
         }
-    };
+    }
 }
 
 std::string task_701_720(std::string const& str)
 {
-    using Calculator::Expression;
-    std::queue<Expression> rpn;
+    using namespace calculator;
 
     std::stack<int> values;
-    while (!rpn.empty()) {
-        Expression& expr = rpn.front();
-        if (expr.isOperation()) {
-            int v1 = values.top(); values.pop();
-            int v2 = values.top(); values.pop();
-            values.push(expr.exec(v1, v2));
+    std::stack<char> operations;
+
+    int tmpNumber = 0;
+    int indexPrevOperator = -1;
+    int indexPrevOperand = -1;
+
+    for (int i = 0; i < str.size(); i++) {
+        char c = str[i];
+        if (isDelim(c)) {
+            continue;
+        }
+        if (c == '(') {
+            operations.push('(');
+        }
+        else if (c == ')') {
+            while (operations.top() != '(') {
+                computeOperation(values, operations.top());
+                operations.pop();
+            }
+            operations.pop();
+        }
+        else if (isOperator(c)) {
+            while (!operations.empty() && priority(operations.top()) >= priority(c)) {
+                computeOperation(values, operations.top());
+                operations.pop();
+            }
+            operations.push(c);
+        }
+        else if (isDigit(c)) {
+            tmpNumber = c - '0';
+            i++;
+            while (i < str.size() && isDigit(str[i])) {
+                tmpNumber = tmpNumber * 10 + str[i] - '0';
+                i++;
+            }
+            i--;
+            indexPrevOperand = i;
+            values.push(tmpNumber);
         }
         else {
-            values.push(expr.value());
+            return std::string("UNEXPECTED_SYMBOL,") + c;
         }
-        rpn.pop();
     }
-    return std::to_string(values.top());
+    while(!operations.empty()){
+        computeOperation(values, operations.top());
+        operations.pop();
+    }
+    return std::to_string(values.top()); 
 }
 
 #endif
