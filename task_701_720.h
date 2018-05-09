@@ -8,6 +8,17 @@
 
 namespace calculator
 {
+    enum class ErrorType
+    {
+        NONE,
+        OPERATOR_MISSED,
+        OPERAND_MISSED,
+        UNEXPECTED_SYMBOL,
+        TOO_MANY_OPEN_BRACKET,
+        TOO_MANY_CLOSE_BRACKET
+    };
+
+
     inline bool isDelim(char c) { return isspace(c); }
     inline bool isDigit(char c) { return isdigit(c); }
     inline bool isOperator(char c) { return c == '+' || c == '-' || c == '*' || c == '/'; }
@@ -50,38 +61,46 @@ std::string task_701_720(std::string const& str)
     std::stack<int> values;
     std::stack<char> operations;
 
+    ErrorType error = ErrorType::NONE;
     int tmpNumber = 0;
     int countBracket = 0;
     int indexLastPart = -1;
+    int i;
 
-    for (int i = 0; i < str.size(); i++) {
+    for (i = 0; i < str.size(); i++) {
         char c = str[i];
         if (isDelim(c)) {
             continue;
         }
         if (c == '(') {
-            if (indexLastPart != -1 && isDigit(str[indexLastPart])) { // operator missed
-                return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            if (indexLastPart != -1 && !(isOperator(str[indexLastPart]) || str[indexLastPart] == '(')) {
+                error = ErrorType::OPERATOR_MISSED;
+                break;
             }
             operations.push('(');
             countBracket++;
         }
         else if (c == ')') {
+            if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
+                error = ErrorType::OPERAND_MISSED;
+                break;
+            }
             while (!operations.empty() && operations.top() != '(') {
                 computeOperation(values, operations.top());
                 operations.pop();
             }
-            if (operations.empty()) { // too many ')'
-                return "TOO_MANY_)";
+            if (operations.empty()) {
+                error = ErrorType::TOO_MANY_CLOSE_BRACKET;
+                break;
             }
             operations.pop();
             countBracket--;
         }
         else if (isOperator(c)) {
-            if (indexLastPart != -1 && !(isDigit(str[indexLastPart]) || str[indexLastPart] == ')')) { // operand missed
-                return std::string("OPERAND_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            if (indexLastPart == -1 || !(isDigit(str[indexLastPart]) || str[indexLastPart] == ')')) {
+                error = ErrorType::OPERAND_MISSED;
+                break;
             }
-
             while (!operations.empty() && priority(operations.top()) >= priority(c)) {
                 computeOperation(values, operations.top());
                 operations.pop();
@@ -89,8 +108,9 @@ std::string task_701_720(std::string const& str)
             operations.push(c);
         }
         else if (isDigit(c)) {
-            if (indexLastPart != -1 && isDigit(str[indexLastPart])) { // operator missed
-                return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+            if (indexLastPart != -1 && (isDigit(str[indexLastPart]) || str[indexLastPart] == ')')) { // operator missed
+                error = ErrorType::OPERATOR_MISSED;
+                break;
             }
             tmpNumber = c - '0';
             i++;
@@ -102,13 +122,30 @@ std::string task_701_720(std::string const& str)
             values.push(tmpNumber);
         }
         else {
-            return std::string("UNEXPECTED_SYMBOL,") + c;
+            error = ErrorType::UNEXPECTED_SYMBOL;
+            break;
         }
         indexLastPart = i;
     }
-    if (countBracket % 2 == 1) { // too many '('
-        return "TOO_MANY_(";
+    if (error == ErrorType::NONE && countBracket % 2 == 1) {
+        error = ErrorType::TOO_MANY_OPEN_BRACKET;
     }
+
+    // handle error
+    switch(error) {
+    case ErrorType::UNEXPECTED_SYMBOL:
+        return std::string("UNEXPECTED_SYMBOL,") + str[i];
+    case ErrorType::TOO_MANY_OPEN_BRACKET:
+        return "TOO_MANY_(";
+    case ErrorType::TOO_MANY_CLOSE_BRACKET:
+        return "TOO_MANY_)";
+    case ErrorType::OPERATOR_MISSED:
+        return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
+    case ErrorType::OPERAND_MISSED:
+        std::string msg("OPERAND_MISSED,");
+        return msg + ((indexLastPart == -1) ? std::string(str, 0, i + 1) : std::string(str, indexLastPart, i - indexLastPart + 1));
+    }
+
     while(!operations.empty()){
         computeOperation(values, operations.top());
         operations.pop();
