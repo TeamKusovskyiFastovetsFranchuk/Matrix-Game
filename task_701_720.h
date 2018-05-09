@@ -127,7 +127,11 @@ std::string task_701_720(std::string const& str)
         }
         indexLastPart = i;
     }
-    if (error == ErrorType::NONE && countBracket % 2 == 1) {
+
+    if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
+        error = ErrorType::OPERAND_MISSED;
+    }
+    else if (error == ErrorType::NONE && countBracket % 2 == 1) {
         error = ErrorType::TOO_MANY_OPEN_BRACKET;
     }
 
