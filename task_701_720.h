@@ -81,7 +81,7 @@ std::string task_701_720(std::string const& str)
             countBracket++;
         }
         else if (c == ')') {
-            if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
+            if (indexLastPart != -1 && (isOperator(str[indexLastPart]) || str[indexLastPart] == '(')) {
                 error = ErrorType::OPERAND_MISSED;
                 break;
             }
