@@ -1,5 +1,5 @@
 1-40 Stas (complete)
-41-60 Stas
+41-60 Stas (complete)
 61-80 Me (complete)
 81-100 Me (complete)
 101-120 Me (complete)
@@ -31,3 +31,9 @@
 621-640
 641-660
 661-680
+681-700
+701-720 Stas (complete)
+721-740
+
+Completed: 22
+Unresolved: 14
