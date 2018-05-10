@@ -155,7 +155,16 @@ std::string task_701_720(std::string const& str)
         return std::string("OPERATOR_MISSED,") + std::string(str, indexLastPart, i - indexLastPart + 1);
     case ErrorType::OPERAND_MISSED:
         std::string msg("OPERAND_MISSED,");
-        return msg + ((indexLastPart == -1) ? std::string(str, 0, i + 1) : std::string(str, indexLastPart, i - indexLastPart + 1));
+        if (indexLastPart == -1) {
+            msg += std::string(str, 0, i + 1);
+        }
+        else if (indexLastPart == i) {
+            msg += std::string(str, i, str.size() - i);
+        }
+        else {
+            msg += std::string(str, indexLastPart, i - indexLastPart + 1);
+        }
+        return msg;
     }
 
     while(!operations.empty()){
