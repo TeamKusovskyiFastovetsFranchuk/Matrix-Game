@@ -15,7 +15,8 @@ namespace calculator
         OPERAND_MISSED,
         UNEXPECTED_SYMBOL,
         TOO_MANY_OPEN_BRACKET,
-        TOO_MANY_CLOSE_BRACKET
+        TOO_MANY_CLOSE_BRACKET, 
+        UNDEF_ERROR
     };
 
 
@@ -128,15 +129,22 @@ std::string task_701_720(std::string const& str)
         indexLastPart = i;
     }
 
-    if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
-        error = ErrorType::OPERAND_MISSED;
-    }
-    else if (error == ErrorType::NONE && countBracket % 2 == 1) {
-        error = ErrorType::TOO_MANY_OPEN_BRACKET;
+    if (error == ErrorType::NONE) {
+        if (values.empty()) {
+            error = ErrorType::UNDEF_ERROR;
+        }
+        if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
+            error = ErrorType::OPERAND_MISSED;
+        }
+        else if (countBracket % 2 == 1) {
+            error = ErrorType::TOO_MANY_OPEN_BRACKET;
+        }
     }
 
     // handle error
     switch(error) {
+    case ErrorType::UNDEF_ERROR:
+        return "UNDEF_ERROR";
     case ErrorType::UNEXPECTED_SYMBOL:
         return std::string("UNEXPECTED_SYMBOL,") + str[i];
     case ErrorType::TOO_MANY_OPEN_BRACKET:
