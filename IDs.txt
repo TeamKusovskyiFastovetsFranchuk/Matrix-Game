@@ -35,5 +35,5 @@
 701-720 Stas (complete)
 721-740
 
-Completed: 22
-Unresolved: 14
+Completed: 23
+Unresolved: 13
