@@ -130,14 +130,14 @@ std::string task_701_720(std::string const& str)
     }
 
     if (error == ErrorType::NONE) {
-        if (values.empty()) {
-            error = ErrorType::UNDEF_ERROR;
-        }
         if (indexLastPart != -1 && isOperator(str[indexLastPart])) {
             error = ErrorType::OPERAND_MISSED;
         }
         else if (countBracket % 2 == 1) {
             error = ErrorType::TOO_MANY_OPEN_BRACKET;
+        }
+        else if (values.empty()) {
+            error = ErrorType::UNDEF_ERROR;
         }
     }
 
@@ -157,9 +157,6 @@ std::string task_701_720(std::string const& str)
         std::string msg("OPERAND_MISSED,");
         if (indexLastPart == -1) {
             msg += std::string(str, 0, i + 1);
-        }
-        else if (indexLastPart == i) {
-            msg += std::string(str, i, str.size() - i);
         }
         else {
             msg += std::string(str, indexLastPart, i - indexLastPart + 1);
