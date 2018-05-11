@@ -32,7 +32,7 @@ namespace calculator
         return -1;
     }
 
-    void computeOperation(std::stack<int>& values, char op)
+    bool computeOperation(std::stack<int>& values, char op)
     {
         int v2 = values.top();
         values.pop();
@@ -49,9 +49,12 @@ namespace calculator
             values.push(v1 * v2);
             break;
         case '/':
+            if (v2 == 0)
+                return false;
             values.push(v1 / v2);
             break;
         }
+        return true;
     }
 }
 
@@ -61,6 +64,7 @@ std::string task_701_720(std::string const& str)
 
     std::stack<int> values;
     std::stack<char> operations;
+    bool errorOperation = false;
 
     ErrorType error = ErrorType::NONE;
     int tmpNumber = 0;
@@ -86,10 +90,17 @@ std::string task_701_720(std::string const& str)
                 error = ErrorType::OPERAND_MISSED;
                 break;
             }
-            while (!operations.empty() && operations.top() != '(') {
-                computeOperation(values, operations.top());
+            
+            while (!operations.empty() && operations.top() != '(' && !errorOperation) {
+                errorOperation = !computeOperation(values, operations.top());
                 operations.pop();
             }
+
+            if (errorOperation) {
+                error = ErrorType::UNDEF_ERROR;
+                break;
+            }
+
             if (operations.empty()) {
                 error = ErrorType::TOO_MANY_CLOSE_BRACKET;
                 break;
@@ -102,10 +113,16 @@ std::string task_701_720(std::string const& str)
                 error = ErrorType::OPERAND_MISSED;
                 break;
             }
-            while (!operations.empty() && priority(operations.top()) >= priority(c)) {
-                computeOperation(values, operations.top());
+            while (!operations.empty() && priority(operations.top()) >= priority(c) && !errorOperation) {
+                errorOperation = !computeOperation(values, operations.top());
                 operations.pop();
             }
+            
+            if (errorOperation) {
+                error = ErrorType::UNDEF_ERROR;
+                break;
+            }
+
             operations.push(c);
         }
         else if (isDigit(c)) {
@@ -139,6 +156,15 @@ std::string task_701_720(std::string const& str)
         else if (values.empty()) {
             error = ErrorType::UNDEF_ERROR;
         }
+        else {
+            while(!operations.empty() && !errorOperation) {
+            errorOperation = !computeOperation(values, operations.top());
+            operations.pop();
+            }
+            if (errorOperation) {
+                error = ErrorType::UNDEF_ERROR;
+            }
+        }    
     }
 
     // handle error
@@ -164,10 +190,6 @@ std::string task_701_720(std::string const& str)
         return msg;
     }
 
-    while(!operations.empty()){
-        computeOperation(values, operations.top());
-        operations.pop();
-    }
     return std::to_string(values.top()); 
 }
 
