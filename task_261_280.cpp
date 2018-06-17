@@ -1,8 +1,6 @@
 #include "task_261_280.h"
 #include <cmath>
 
-float const M_PI = 3.141592f;
-
 std::string task_261_280(const std::string& str)
 {
     int x = 0, y = 0;
