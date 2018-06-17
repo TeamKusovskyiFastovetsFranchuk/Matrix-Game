@@ -2,12 +2,10 @@
 #define TASK_241_260_H
 
 #include <vector>
-#include <iostream>
 #include <algorithm>
 #include <iterator>
 #include <string>
 using std::string;
-using std::stoi;
 using std::to_string;
 using std::vector;
 
@@ -23,6 +21,10 @@ string task_241(string &input) {
 		}
 		vc[ind].push_back(input[i]);
 	}
+
+	std::sort(vc[0].begin(), vc[0].end());
+	std::sort(vc[1].begin(), vc[1].end());
+
 	std::set_union(vc[0].begin(), vc[0].end(), vc[1].begin(), vc[1].end(), std::back_inserter(ans[0]));
 	std::set_intersection(vc[0].begin(), vc[0].end(), vc[1].begin(), vc[1].end(), std::back_inserter(ans[1]));
 	std::set_difference(vc[0].begin(), vc[0].end(), vc[1].begin(), vc[1].end(), std::back_inserter(ans[2]));
