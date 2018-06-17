@@ -1,31 +1,52 @@
 #include "task_261_280.h"
-
-#include <regex>
 #include <cmath>
 
-#include <QString>
+float const M_PI = 3.141592f;
 
 std::string task_261_280(const std::string& str)
 {
+    int x = 0, y = 0;
+    bool xNeg = false, yNeg = false;
+    
+    int it = 0;
 
-    int x, y;
-    std::regex reg("(-?\\d+),(-?\\d+)");
-    std::cmatch match;
+    xNeg = str[it] == '-';
+    if (xNeg) {
+        it++;
+    }
+    while (str[it] != ',') { // first number
+        char c = str[it++];
+        x = x * 10 + c - '0';
+    }
+    it++;
 
-    if (!std::regex_match(str.c_str(), match, reg)) {
-        return "fail";
+    yNeg = str[it] == '-';
+    if (yNeg) {
+        it++;
+    }
+    while (it < str.size()) { // second number
+        char c = str[it++];
+        y = y * 10 + c - '0';
     }
 
-    x = std::stoi(match[1]);
-    y = std::stoi(match[2]);
+    if (xNeg) {
+        x *= -1;
+    }
+    if (yNeg) {
+        y *= -1;
+    }
 
     float r = sqrt(x * x + y * y);
-    float a = 0;
+    float a = 0.0f;
 
     if (r > 0) {
-        a = acos(x / r) / M_PI * 180.0f;
+        a = (acos(x / r) / M_PI) * 180.0f;
     }
 
-    QString format = "%1,%2";
-    return format.arg(QString::number(r, 'f', 2)).arg(QString::number(a, 'f', 2)).toStdString();
+    r = static_cast<int>(r * 100) / 100.0f;
+    a = static_cast<int>(a * 100) / 100.0f;
+
+    char out[50];
+    sprintf(out, "%.2F,%.2F", r, a);
+    return out;
 }

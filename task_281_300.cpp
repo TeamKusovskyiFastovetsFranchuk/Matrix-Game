@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cstdio>
 
+float const M_PI = 3.141592f;
 
 std::string task_281_300(const std::string& str)
 {
@@ -19,10 +20,13 @@ std::string task_281_300(const std::string& str)
     y = std::stoi(match[2]);
     a = std::stoi(match[3]);
 
-    float r_a = a / 180.0f * M_PI;
+    float r_a = (a / -180.0f) * M_PI;
 
     float nx = x * cos(r_a) + y * sin(r_a);
     float ny = y * cos(r_a) - x * sin(r_a);
+
+    nx = static_cast<int>(nx * 100) / 100.0f;
+    ny = static_cast<int>(ny * 100) / 100.0f;
     
     char out[25];
     sprintf(out, "%.2F,%.2F", nx, ny);

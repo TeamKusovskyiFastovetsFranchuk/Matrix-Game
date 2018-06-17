@@ -2,8 +2,8 @@
 
 std::string task_321_340(const std::string& str)
 {
-    uint32_t value = static_cast<uint32_t>(std::stoul(str));
-    uint32_t tmp = value;
+    uint32_t tmp = static_cast<uint32_t>(std::stoul(str));
+    uint32_t value = 0;
 
     char* byte_value = reinterpret_cast<char*>(&value);
     char* byte_tmp = reinterpret_cast<char*>(&tmp);
