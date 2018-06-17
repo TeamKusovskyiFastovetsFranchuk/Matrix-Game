@@ -4,8 +4,6 @@
 #include <cmath>
 #include <cstdio>
 
-float const M_PI = 3.141592f;
-
 std::string task_281_300(const std::string& str)
 {
     int x, y, a;
